@@ -1,0 +1,70 @@
+{
+  "coin": {
+    "name": "UFO",
+    "shortcut": "UFO",
+    "label": "UFO",
+    "alias": "ufo"
+  },
+  "ports": {
+    "backend_rpc": 8096,
+    "backend_message_queue": 38396,
+    "blockbook_internal": 9096,
+    "blockbook_public": 9196
+  },
+  "ipc": {
+    "rpc_url_template": "http://127.0.0.1:{{.Ports.BackendRPC}}",
+    "rpc_user": "rpc",
+    "rpc_pass": "rpc",
+    "rpc_timeout": 25,
+    "message_queue_binding_template": "tcp://127.0.0.1:{{.Ports.BackendMessageQueue}}"
+  },
+  "backend": {
+    "package_name": "backend-ufo",
+    "package_revision": "satoshilabs-1",
+    "system_user": "ufo",
+    "version": "0.18.0",
+    "binary_url": "https://ufobject.com/ufo-0.18.0-x86_64-linux-gnu.tar.gz",
+    "verification_type": "sha256",
+    "verification_source": "68d8f3f640f4e351a533c6a806befbd75422bbbc9a4a9cbe1d657e352744fddb",
+    "extract_command": "tar -C backend --strip 1 -xf",
+    "exclude_files": [],
+    "exec_command_template": "{{.Env.BackendInstallPath}}/{{.Coin.Alias}}/bin/ufod -datadir={{.Env.BackendDataPath}}/{{.Coin.Alias}}/backend -conf={{.Env.BackendInstallPath}}/{{.Coin.Alias}}/{{.Coin.Alias}}.conf -pid=/run/{{.Coin.Alias}}/{{.Coin.Alias}}.pid",
+    "logrotate_files_template": "{{.Env.BackendDataPath}}/{{.Coin.Alias}}/backend/*.log",
+    "postinst_script_template": "",
+    "service_type": "forking",
+    "service_additional_params_template": "",
+    "protect_memory": true,
+    "mainnet": true,
+    "server_config_file": "bitcoin_like.conf",
+    "client_config_file": "bitcoin_like_client.conf",
+    "additional_params": {
+      "whitelist": "127.0.0.1"
+    }
+  },
+  "blockbook": {
+    "package_name": "blockbook-ufo",
+    "system_user": "blockbook-ufo",
+    "internal_binding_template": ":{{.Ports.BlockbookInternal}}",
+    "public_binding_template": ":{{.Ports.BlockbookPublic}}",
+    "explorer_url": "",
+    "additional_params": "",
+    "block_chain": {
+      "parse": true,
+      "mempool_workers": 8,
+      "mempool_sub_workers": 2,
+      "block_addresses_to_keep": 300,
+      "xpub_magic": 27108450,
+      "xpub_magic_segwit_p2sh": 28471030,
+      "xpub_magic_segwit_native": 78792518,
+      "slip44": 202,
+      "additional_params": {
+        "fiat_rates": "coingecko",
+        "fiat_rates_params": "{\"url\": \"https://api.coingecko.com/api/v3\", \"coin\": \"uniform-fiscal-object\", \"periodSeconds\": 60}"
+      }
+    }
+  },
+  "meta": {
+    "package_maintainer": "IT",
+    "package_maintainer_email": "it@satoshilabs.com"
+  }
+}
